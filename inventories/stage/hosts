@@ -1,0 +1,24 @@
+[presto_coordinator_node]
+192.168.1.1 node_ip=192.168.1.1 node_id=1
+
+[presto_coordinator_node:vars]
+ansible_connection=ssh
+ansible_port=22
+ansible_user=root
+ansible_password=<password>
+ansible_become=yes
+env=test
+
+[presto_worker_node]
+192.168.1.2 node_ip=192.168.1.2 node_id=11
+192.168.1.3 node_ip=192.168.1.3 node_id=12
+192.168.1.4 node_ip=192.168.1.4 node_id=13
+
+[presto_worker_node:vars]
+ansible_connection=ssh
+ansible_port=22
+ansible_user=root
+ansible_password=<password>
+ansible_become=yes
+env=test
+presto_coordinator_node_ip=192.168.1.1

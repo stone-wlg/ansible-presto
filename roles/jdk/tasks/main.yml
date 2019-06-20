@@ -1,0 +1,11 @@
+- name: "copy Java RPM file"
+  copy:
+    src: "jdk-8u211-linux-x64.rpm"
+    dest: "/tmp/jdk-8u211-linux-x64.rpm"
+  tags: ["jdk"]
+
+- name: "install JDK via RPM file with yum"
+  yum:
+    name: "/tmp/jdk-8u211-linux-x64.rpm"
+    state: "present"
+  tags: ["jdk"]

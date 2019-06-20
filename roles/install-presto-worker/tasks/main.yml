@@ -1,0 +1,71 @@
+- name: "create presto user"
+  user:
+    name: "{{ presto_user }}"
+    shell: "/sbin/nologin"
+    create_home: "no"
+    home: "{{ presto_home }}"
+    state: "present"
+
+- name: "unarchive presto"
+  unarchive:
+    src: "presto-server-0.221.tar.gz"
+    dest: "{{ install_path }}"
+    owner: "{{ presto_user }}"
+    group: "{{ presto_group }}"
+    mode: "0755"
+
+- name: "chown presto"
+  file:
+    path: "{{ install_path }}/presto-server-0.221"
+    owner: "{{ presto_user }}"
+    group: "{{ presto_group }}"
+    recurse: "yes" 
+
+- name: "Symbolic link for presto server"
+  file: 
+    src: "{{ install_path }}/presto-server-0.221"
+    dest: "{{ install_path }}/presto"
+    state: "link"
+    owner: "{{ presto_user }}"
+    group: "{{ presto_group }}"    
+
+- name: "create presto directory"
+  file:
+    path: "{{ presto_dir }}"
+    state: "directory"
+    owner: "{{ presto_user }}"
+    group: "{{ presto_group }}"
+  with_items:
+    - "{{ presto_node_data_dir }}"
+    - "{{ presto_node_etc_dir }}"
+    - "{{ presto_node_catalog_dir }}"
+  loop_control:
+    loop_var: "presto_dir"           
+    
+- name: "update limits"
+  pam_limits:
+    domain: "{{ presto_user }}"
+    limit_type: "{{ limit.limit_type }}"
+    limit_item: "{{ limit.limit_item }}"
+    value: "{{ limit.value }}"
+  with_items:
+    - { limit_type: '-', limit_item: 'nofile', value: 1048576 }
+    - { limit_type: '-', limit_item: 'nproc', value: 32768 }
+    - { limit_type: '-', limit_item: 'memlock', value: "unlimited" }
+    - { limit_type: '-', limit_item: 'as', value: "unlimited" }
+  loop_control:
+    loop_var: "limit"       
+
+- name: "copy presto service"
+  template: 
+    src: "presto.service.j2"
+    dest: "/usr/lib/systemd/system/presto.service"   
+
+- name: "enable presto service"
+  systemd: 
+    name: "presto" 
+    enabled: "yes"
+
+- import_tasks: "copy-presto-config.yml"
+
+- import_tasks: "copy-presto-catalog.yml"

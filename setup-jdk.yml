@@ -1,0 +1,12 @@
+- hosts: "all"
+
+  vars_prompt:
+    - name: "setup_prompt"
+      prompt: "Are you sure (yes/no)?"
+      private: "no"
+
+  tasks:
+    - name: "setup jdk"
+      import_role:
+        name: "jdk"
+      when: "setup_prompt | bool" 

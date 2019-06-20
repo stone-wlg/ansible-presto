@@ -1,0 +1,19 @@
+[Unit]
+Description="Presto"
+After=network.target
+
+[Service]
+Type=forking
+User={{ presto_user }}
+Group={{ presto_group }}
+ExecStart={{ presto_home }}/bin/launcher start
+StandardOutput=journal
+StandardError=journal
+LimitNOFILE=1048576
+LimitMEMLOCK=infinity
+LimitNPROC=infinity
+LimitAS=infinity
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

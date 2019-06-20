@@ -1,0 +1,13 @@
+---
+- hosts: "presto_worker_node"
+
+  vars_prompt:
+    - name: "setup_prompt"
+      prompt: "Are you sure (yes/no)?"
+      private: "no"
+
+  tasks:
+    - name: "setup presto worker"
+      import_role:
+        name: "install-presto-worker"
+      when: "setup_prompt | bool"  

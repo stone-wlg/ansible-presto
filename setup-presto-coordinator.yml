@@ -1,0 +1,13 @@
+---
+- hosts: "presto_coordinator_node"
+
+  vars_prompt:
+    - name: "setup_prompt"
+      prompt: "Are you sure (yes/no)?"
+      private: "no"
+
+  tasks:
+    - name: "setup presto coordinator"
+      import_role:
+        name: "install-presto-coordinator"
+      when: "setup_prompt | bool"  

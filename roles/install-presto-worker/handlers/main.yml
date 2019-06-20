@@ -1,0 +1,14 @@
+- name: "restart presto"
+  systemd: 
+    name: "presto" 
+    state: "restarted"
+
+- name: "reload presto"
+  systemd: 
+    name: "presto" 
+    state: "reloaded"
+
+- name: "stop presto"
+  systemd: 
+    name: "presto" 
+    state: "stopped"

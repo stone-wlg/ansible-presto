@@ -1,0 +1,18 @@
+---
+- hosts: "presto_coordinator_node"
+
+  tasks:
+    - name: "copy presto coordinator config"
+      import_role:
+        name: "install-presto-coordinator"
+        tasks_from: "copy-presto-config.yml" 
+      tags: ["copy-presto-config"]
+      
+- hosts: "presto_worker_node"
+
+  tasks:
+    - name: "copy presto worker config"
+      import_role:
+        name: "install-presto-worker"
+        tasks_from: "copy-presto-config.yml" 
+      tags: ["copy-presto-config"]

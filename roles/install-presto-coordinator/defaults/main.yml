@@ -1,0 +1,9 @@
+presto_user: "presto"
+presto_group: "presto"
+
+install_path: "/opt"
+presto_home: "{{ install_path }}/presto"
+
+presto_node_data_dir: "{{ presto_home }}/data"
+presto_node_etc_dir: "{{ presto_home }}/etc"
+presto_node_catalog_dir: "{{ presto_node_etc_dir }}/catalog"

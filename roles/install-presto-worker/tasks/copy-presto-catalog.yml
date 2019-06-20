@@ -1,0 +1,15 @@
+- name: "copy presto catalog"
+  template: 
+    src: "{{ catalog_filename }}.j2"
+    dest: "{{ presto_node_catalog_dir }}/{{ catalog_filename }}"
+    owner: "{{ presto_user }}"
+    group: "{{ presto_group }}"
+  with_items:
+    - "memory.properties"
+    - "cassandra.properties"
+    - "mysql.properties"
+  loop_control:
+    loop_var: "catalog_filename"
+  notify:
+    - "restart presto"     
+  tags: ["copy-presto-catalog"]  

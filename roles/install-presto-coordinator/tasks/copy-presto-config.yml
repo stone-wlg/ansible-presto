@@ -1,0 +1,16 @@
+- name: "copy presto config"
+  template: 
+    src: "{{ config_filename }}.j2"
+    dest: "{{ presto_node_etc_dir }}/{{ config_filename }}"
+    owner: "{{ presto_user }}"
+    group: "{{ presto_group }}"
+  with_items:
+    - "config.properties"
+    - "jvm.config"
+    - "log.properties"
+    - "node.properties"
+  loop_control:
+    loop_var: "config_filename" 
+  notify:
+    - "restart presto"     
+  tags: ["copy-presto-config"] 
